@@ -95,8 +95,11 @@ export default {
               JSON.stringify(res.data.data)
             )
             this.$router.push('/home')
-          }).catch({
-
+          }).catch(() => {
+            this.$message({
+              message: '您输入的手机号或验证码错误',
+              type: 'warning'
+            })
           })
         }
       })
