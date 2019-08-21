@@ -37,7 +37,7 @@ export default {
     }
     return {
       formData: {
-        phone: '',
+        mobile: '',
         code: '',
         check: false
       },
@@ -92,14 +92,9 @@ export default {
             console.log(res.data)
             window.localStorage.setItem(
               'user_data',
-              JSON.stringify(res.data.data)
+              JSON.stringify(res.data)
             )
             this.$router.push('/home')
-          }).catch(() => {
-            this.$message({
-              message: '您输入的手机号或验证码错误',
-              type: 'warning'
-            })
           })
         }
       })
