@@ -3,9 +3,7 @@
     <el-col :span="6">
       <div class="grid-content">北京市blackHouse总部</div>
     </el-col>
-    <!-- <el-col :span="6">
-      <div class="grid-content bg-purple-light"></div>
-    </el-col>-->
+
     <el-col :span="6" class="layout_right">
       <img :src="user.photo?user.photo:defaultImg" alt />
       <el-dropdown trigger="click" @command=commandAction>

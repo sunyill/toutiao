@@ -5,7 +5,7 @@
         <img src="../../assets/img/logo_index.png" alt />
       </div>
       <el-form :model="formData" label-width="80px" ref="loginform" class="form" :rules="rules">
-        <el-form-item label="手机号" prop="mobile">
+        <el-form-item label="手机号" prop="mobile" >
           <el-input v-model="formData.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
 
@@ -14,11 +14,14 @@
           <el-button style="float:right">发送验证码</el-button>
         </el-form-item>
 
+            <!-- `checked` 为 true 或 false -->
+
         <el-form-item prop="check">
+          <el-checkbox v-model="checked" >记住账号密码</el-checkbox>
           <el-checkbox v-model="formData.check" class="checkbox">我已阅读并同意用户协议和隐私条款</el-checkbox>
         </el-form-item>
 
-          <el-button @click="clickFun" type="primary" style="width:100%;margin-top:15px">点击登录</el-button>
+          <el-button @click="clickFun" type="primary" style="width:100%">点击登录</el-button>
 
       </el-form>
     </el-card>
@@ -39,7 +42,8 @@ export default {
       formData: {
         mobile: '',
         code: '',
-        check: false
+        check: false,
+        checked: true
       },
       rules: {
         mobile: [
@@ -118,17 +122,18 @@ export default {
     height: 350px;
     .title {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 5px;
       img {
         width: 200px;
-        height: 45px;
+        height: 40px;
       }
     }
     .form {
       .checkbox {
+        float: left;
         display: flex;
         justify-content: left;
-        text-align: center;
+        text-align: left;
       }
     }
   }
