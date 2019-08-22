@@ -1,5 +1,5 @@
 <template>
-  <el-card v-loading='loading'>
+  <el-card v-loading='loading' element-loading-text="拼命加载中..." element-loading-spinner="el-icon-loading">
     <breadCommon slot="header">
       <!-- 面包屑的插槽 具名插槽  title-->
       <template slot="title">评论列表</template>
