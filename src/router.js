@@ -23,6 +23,9 @@ export default new Router({
       children: [{
         path: '',
         component: Main
+      }, {
+        path: 'comment',
+        component: () => import('./views/comment')
       }]
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
