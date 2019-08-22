@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading='loading'>
     <breadCommon slot="header">
       <!-- 面包屑的插槽 具名插槽  title-->
       <template slot="title">评论列表</template>
@@ -42,7 +42,8 @@ export default {
         pageSize: 10,
         total: 0,
         currentPage: 1
-      }
+      },
+      loading: false
     }
   },
   methods: {
@@ -65,6 +66,7 @@ export default {
       })
     },
     getComments () {
+      this.loading = true
       let pageParams = { page: this.page.currentPage, per_page: this.page.pageSize }
       this.$http({
         url: '/articles',
@@ -77,6 +79,7 @@ export default {
         this.list = result.data.results
         // total_count  接口中总的数据
         this.page.total = result.data.total_count
+        this.loading = false
       })
     },
     formatter (row, column, cellValue, index) {
