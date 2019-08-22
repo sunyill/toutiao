@@ -24,7 +24,7 @@ export default new Router({
         path: '',
         component: Main
       }, {
-        path: 'comment',
+        path: '/index/comment',
         component: () => import('./views/comment')
       }]
       // route level code-splitting

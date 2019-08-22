@@ -6,6 +6,6 @@ export default {
   install (Vue) {
     Vue.component('slide-index', layoutslide)
     Vue.component('header-index', layoutheader)
-    Vue.component('bread_eat', breadCommon)
+    Vue.component('breadCommon', breadCommon)
   }
 }
