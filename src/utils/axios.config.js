@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import JSONBig from 'json-bigint'
 // import { Message } from 'element-ui'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
+axios.defaults.transformResponse = [function (data) {
+  return data ? JSONBig.parse(data) : {} // 处理大数字
+}]
 axios.interceptors.request.use(function (config) {
   // 获取用户的本地存储及token
   let userStorage = window.localStorage.getItem('user_data')
