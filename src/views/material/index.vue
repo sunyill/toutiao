@@ -13,8 +13,8 @@
           <el-card class="img-card" v-for="item in list" :key="item.id">
             <img :src="item.url" alt />
             <el-row align="middle" class="operate" type="flex" justify="space-around">
-              <i class="el-icon-star-on"></i>
-              <i class="el-icon-delete-solid"></i>
+              <i class="el-icon-star-on" cursor="pointer" :style="{color:item.is_collected ? 'red':''}" @click="collectThisImg(item)"></i>
+              <i class="el-icon-delete-solid" cursor="pointer" @click="delMaterial(item)"></i>
             </el-row>
           </el-card>
         </div>
@@ -65,6 +65,32 @@ export default {
     }
   },
   methods: {
+    // 收藏or 取消 素材图片
+    collectThisImg (item) {
+      let msg = item.is_collected ? '取消收藏' : '收藏'
+      this.$confirm(`您确定${msg}此图片吗?`, '提示').then(() => {
+        this.$http({
+          method: 'put',
+          url: `/user/images/${item.id}`,
+          data: { collect: !item.is_collected } // 取相反,收藏=>取消收藏
+
+        }).then((res) => {
+          this.getMaterial()
+        })
+      })
+    },
+    // 删除素材
+    delMaterial (item) {
+      this.$confirm('您确定要删除我吗? (*@ο@*) 哇～', '提示').then(() => {
+        this.$http({
+          method: 'delete',
+          url: `/user/images/${item.id}`
+
+        }).then(res => {
+          this.getMaterial()
+        })
+      })
+    },
     // tabs标签切换
     handleClick () {
       this.page.currentPage = 1
@@ -112,7 +138,6 @@ export default {
     position: relative;
     img {
       width: 100%;
-
     }
     .operate {
       position: absolute;
