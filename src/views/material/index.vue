@@ -4,6 +4,12 @@
     element-loading-text="拼命加载中..."
     element-loading-spinner="el-icon-loading"
   >
+    <el-upload :http-request="upLoadThisImg" action=''  class="upload-material" :show-file-list="false">
+      <el-button type="primary" cursor='pointer'>
+        上传图片
+        <i class="el-icon-upload el-icon--right"></i>
+      </el-button>
+    </el-upload>
     <breadCommon slot="header">
       <template slot="title">素材管理</template>
     </breadCommon>
@@ -13,7 +19,12 @@
           <el-card class="img-card" v-for="item in list" :key="item.id">
             <img :src="item.url" alt />
             <el-row align="middle" class="operate" type="flex" justify="space-around">
-              <i class="el-icon-star-on" cursor="pointer" :style="{color:item.is_collected ? 'red':''}" @click="collectThisImg(item)"></i>
+              <i
+                class="el-icon-star-on"
+                cursor="pointer"
+                :style="{color:item.is_collected ? 'red':''}"
+                @click="collectThisImg(item)"
+              ></i>
               <i class="el-icon-delete-solid" cursor="pointer" @click="delMaterial(item)"></i>
             </el-row>
           </el-card>
@@ -65,6 +76,19 @@ export default {
     }
   },
   methods: {
+    // 上传图片的方法
+    upLoadThisImg (params) {
+      alert('1')
+      let formData = new FormData()
+      formData.append('image', params.file)
+      this.$http({
+        method: 'post',
+        url: '/user/images',
+        data: formData
+      }).then((res) => {
+        this.getMaterial()
+      })
+    },
     // 收藏or 取消 素材图片
     collectThisImg (item) {
       let msg = item.is_collected ? '取消收藏' : '收藏'
@@ -127,6 +151,12 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.upload-material {
+  position: absolute;
+  right: 25px;
+  margin-top: -10px;
+  z-index: 1;
+}
 .img-list {
   display: flex;
   justify-content: space-around;
