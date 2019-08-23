@@ -6,6 +6,6 @@ export default {
   install (Vue) {
     Vue.component('slide-index', layoutslide)
     Vue.component('header-index', layoutheader)
-    Vue.component('breadCommon', breadCommon)
+    Vue.component('breadCommon', breadCommon) // 封装的面包屑组件
   }
 }
