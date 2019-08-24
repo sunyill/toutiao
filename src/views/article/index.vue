@@ -6,21 +6,21 @@
     <!-- 工具栏--显示表单  可搜索区域 -->
     <el-form>
       <el-form-item label="文章状态">
-        <el-radio-group v-model="radio">
-          <el-radio :label="1">全部</el-radio>
-          <el-radio :label="2">草稿</el-radio>
-          <el-radio :label="3">待审核</el-radio>
-          <el-radio :label="4">审核成功</el-radio>
-          <el-radio :label="5">审核失败</el-radio>
+        <el-radio-group @change="refreshList" v-model="formData.status">
+          <el-radio :label="5">全部</el-radio>
+          <el-radio :label="0">草稿</el-radio>
+          <el-radio :label="1">待审核</el-radio>
+          <el-radio :label="2">审核成功</el-radio>
+          <el-radio :label="3">审核失败</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="频道列表">
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="formData.channel_id" placeholder="请选择">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.lable"
-            :value="item.value"
+            v-for="item in channels"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -29,6 +29,10 @@
         <el-date-picker
           style="width:450px;background-color:skyblue"
           type="daterange"
+          @change="refreshList"
+
+          value-format="yyyy-MM-dd"
+          v-model="formData.dataRange"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
@@ -72,40 +76,43 @@ export default {
       page: {
         total: 0
       },
-      radio: 1,
-      value: '',
-      item: '',
-      options: [
-        {
-          lable: '蛋糕🍰',
-          value: '选项1'
-        },
-        {
-          lable: '蛋挞🥚',
-          value: '选项2'
-        },
-        {
-          lable: '香蕉🍌',
-          value: '选项3'
-        },
-        {
-          lable: '苹果🍎',
-          value: '选项4'
-        },
-        {
-          lable: '榴莲🍊',
-          value: '选项5'
-        }
-      ]
+      formData: {
+        status: 5,
+        channel_id: null,
+        dataRange: null
+      },
+      channels: [] // 频道数据
     }
   },
   methods: {
-    getArticles () {
+    // 请求数据, 刷新列表
+    refreshList () {
+      let { status, channel_id: cid, dataRange } = this.formData
+      let params = {
+        status: status === 5 ? null : status,
+        channel_id: cid,
+        begin_pubdate: dataRange && dataRange.length ? dataRange[0] : null,
+        end_pubdate: dataRange && dataRange.length > 1 ? dataRange[1] : null
+
+      }
+      this.getArticles(params)
+    },
+    getArticles (params) {
       this.$http({
-        url: '/articles'
+        url: '/articles',
+        params: { ...params }
       }).then(res => {
         this.list = res.data.results
         this.page.total = res.data.total_count
+      })
+    },
+    // 获取频道列表数据
+    getChannels () {
+      this.$http({
+        url: '/channels'
+      }).then((res) => {
+        console.log(res.data)
+        this.channels = res.data.channels
       })
     }
   },
@@ -137,6 +144,7 @@ export default {
   },
   created () {
     this.getArticles()
+    this.getChannels()
   }
 }
 </script>
