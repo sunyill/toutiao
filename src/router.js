@@ -32,6 +32,9 @@ export default new Router({
       }, {
         path: '/index/articles',
         component: () => import('./views/article')
+      }, {
+        path: '/index/publish',
+        component: () => import('./views/public')
       }]
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
