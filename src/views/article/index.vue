@@ -16,12 +16,7 @@
       </el-form-item>
       <el-form-item label="频道列表">
         <el-select v-model="formData.channel_id" placeholder="请选择">
-          <el-option
-            v-for="item in channels"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
+          <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
 
@@ -30,7 +25,6 @@
           style="width:450px;background-color:skyblue"
           type="daterange"
           @change="refreshList"
-
           value-format="yyyy-MM-dd"
           v-model="formData.dataRange"
           range-separator="至"
@@ -63,17 +57,32 @@
           </div>
         </div>
       </div>
+
+      <!-- 分页组件 -->
+      <el-row type="flex" justify="center" style="margin:25px 0">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :current-page="page.currentPage"
+          :page-size="page.pageSize"
+          :total="page.total"
+          @current-change="changePages"
+        ></el-pagination>
+      </el-row>
     </el-form>
   </el-card>
 </template>
 
 <script>
+
 export default {
   data () {
     return {
       list: [],
       // 文章总数 默认为0
       page: {
+        pageSize: 10,
+        currentPage: 1,
         total: 0
       },
       formData: {
@@ -85,17 +94,28 @@ export default {
     }
   },
   methods: {
-    // 请求数据, 刷新列表
-    refreshList () {
+    // Huo取搜索的条件
+    getConditions () {
       let { status, channel_id: cid, dataRange } = this.formData
       let params = {
         status: status === 5 ? null : status,
         channel_id: cid,
         begin_pubdate: dataRange && dataRange.length ? dataRange[0] : null,
         end_pubdate: dataRange && dataRange.length > 1 ? dataRange[1] : null
-
       }
-      this.getArticles(params)
+      params.page = this.page.currentPage
+      params.per_page = this.page.pageSize
+      return params
+    },
+    // changePages 改变时会触发
+    changePages (newPages) {
+      this.page.currentPage = newPages
+      this.getArticles(this.getConditions()) // 查询数据
+    },
+    // 请求数据, 刷新列表
+    refreshList () {
+      this.page.currentPage = 1
+      this.getArticles(this.getConditions())
     },
     getArticles (params) {
       this.$http({
@@ -110,7 +130,7 @@ export default {
     getChannels () {
       this.$http({
         url: '/channels'
-      }).then((res) => {
+      }).then(res => {
         console.log(res.data)
         this.channels = res.data.channels
       })
@@ -143,7 +163,7 @@ export default {
     }
   },
   created () {
-    this.getArticles()
+    this.getArticles({ page: 1, per_page: 10 })
     this.getChannels()
   }
 }
