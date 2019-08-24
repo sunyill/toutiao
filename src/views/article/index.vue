@@ -48,10 +48,10 @@
             </div>
           </div>
           <div class="right">
-            <span>
+            <span style="cursor:pointer">
               <i class="el-icon-edit"></i>修改
             </span>
-            <span>
+            <span style="cursor:pointer" @click="delThisItem(item)">
               <i class="el-icon-milk-tea"></i>删除
             </span>
           </div>
@@ -94,6 +94,18 @@ export default {
     }
   },
   methods: {
+    // 点击删除删除item
+    delThisItem (item) {
+      // alert('王站, 你是最棒的!')
+      this.$confirm('亲,您确定不爱我了吗?', '友情提示').then(() => {
+        this.$http({
+          url: `/articles${item.id.toString()}`,
+          method: 'delete'
+        })
+      }).then(() => {
+        this.getArticles(this.getConditions())
+      })
+    },
     // Huo取搜索的条件
     getConditions () {
       let { status, channel_id: cid, dataRange } = this.formData
