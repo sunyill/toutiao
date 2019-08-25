@@ -32,6 +32,9 @@ axios.interceptors.response.use(function (response) {
     case 404:
       message = '手机号码不正确'
       break
+    case 409:
+      message = '用户名已存在'
+      break
     case 401:
       message = 'token未传或者过期'
       window.localStorage.clear()
