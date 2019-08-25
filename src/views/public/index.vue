@@ -12,7 +12,7 @@
         <quill-editor style="width:800px;height:300px;margin-bottom:100px" placeholder="请输入内容" v-model="formData.content"></quill-editor>
       </el-form-item>
       <el-form-item label="封面">
-        <el-radio-group v-model="formData.cover.type">
+        <el-radio-group v-model="formData.cover.type" @change="changeType">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
           <el-radio :label="0">无图</el-radio>
@@ -61,6 +61,16 @@ export default {
     }
   },
   methods: {
+    // 根据type 获取不同的一图, 三图, 自动
+    changeType () {
+      if (this.formData.cover.type === 1) { // 单图
+        this.formData.cover.images = ['']
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['', '', '']
+      } else {
+        this.formData.cover.images = []
+      }
+    },
     // 根据ID 获取修改文章中内容
     getArticlesById () {
       let { articlesId } = this.$route.params
