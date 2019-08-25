@@ -100,8 +100,7 @@ export default {
     },
     // 点击删除删除item
     delThisItem (item) {
-      // alert('王站, 你是最棒的!')
-      this.$confirm('亲,您确定不爱我了吗?', '友情提示').then(() => {
+      this.$confirm('亲,您确定要删除了吗?', '友情提示').then(() => {
         this.$http({
           url: `/articles${item.id.toString()}`,
           method: 'delete'

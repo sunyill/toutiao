@@ -33,7 +33,6 @@
 </template>
 
 <script>
-
 export default {
   data () {
     return {
@@ -48,30 +47,52 @@ export default {
         }
       },
       rules: {
-        title: [{ required: true, message: '标题不能为空' }, {
-          min: 5,
-          max: 30,
-          message: '亲, 输入字符在5-30字符之间'
-        }],
+        title: [
+          { required: true, message: '标题不能为空' },
+          {
+            min: 5,
+            max: 30,
+            message: '亲, 输入字符在5-30字符之间'
+          }
+        ],
         content: [{ required: true, message: '文章内容不能为空' }],
         channel_id: [{ required: true, message: '频道不能为空' }]
       }
     }
   },
   methods: {
+    // 根据ID 获取修改文章中内容
+    getArticlesById () {
+      let { articlesId } = this.$route.params
+      console.log(articlesId)
+      this.$http({
+        url: `/articles/${articlesId}`
+      }).then(res => {
+        this.formData = res.data
+      })
+    },
     // 发布文章
     publisThisArticle (draft) {
       this.$refs.myForm.validate(isOk => {
         if (isOk) {
+          let { articlesId } = this.$route.params
+          // 根据articlesId  来区分是否是put 还是post
+          let method = articlesId ? 'put' : 'post'
+          let url = articlesId
+            ? `/articles/${articlesId}`
+            : `/articles`
           this.$http({
-            url: '/articles',
-            method: 'post',
+            // url: '/articles',
+            // method: 'post',
+            url,
+            method,
             params: { draft }, // 是否是草稿
             data: this.formData
-          }).then(res => {
-            // alert('发布成功')
-            this.$router.push('/index/articles')
           })
+            .then(res => {
+              // alert('发布成功')
+              this.$router.push('/index/articles')
+            })
         }
       })
     },
@@ -85,6 +106,9 @@ export default {
     }
   },
   created () {
+    let { articlesId } = this.$route.params
+    // 如果 articlesId 存在的话,就进行调用其中的根据Id  调用方法
+    articlesId && this.getArticlesById()
     this.getChannels()
   }
 }
