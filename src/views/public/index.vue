@@ -20,7 +20,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <imagecover @upDataImages='upDataImages' :type="formData.cover.type" :images="formData.cover.images">
+        <imagecover @upDataImages='upDataImages'  :images="formData.cover.images">
         </imagecover>
       </el-form-item>
       <el-form-item label="频道" prop="channel_id">

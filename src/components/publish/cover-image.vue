@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  props: ['type', 'images'],
+  props: ['images'],
   data () {
     return {
       imageIndex: -1,

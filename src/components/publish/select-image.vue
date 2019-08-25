@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading='loading'>
     <el-tabs v-model="activeName">
       <el-tab-pane label="素材管理" name="material">
         <div class="material-list">
@@ -8,18 +8,21 @@
           </el-card>
         </div>
         <!-- 分页部分 -->
-        <el-row type="flex" justify="center">
+        <el-row type="flex" justify="center" style="margin:10px 0">
           <el-pagination
             background
             layout="prev, pager, next"
-            :pager-size="page.pagerSize"
+            :page-size="page.pageSize"
             :current-page="page.currentPage"
             :total="page.total"
             @current-change="changePage"
           ></el-pagination>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="上传" name="upload">上传</el-tab-pane>
+      <el-tab-pane label="上传" name="upload">
+          <el-upload :http-request="uploadImg" class="avatar-uploader" action :show-file-list="false"></el-upload>
+          <i class="el-icon-plus avatar-uploader-icon"></i>
+      </el-tab-pane>
     </el-tabs>
   </el-card>
 </template>
@@ -28,16 +31,30 @@
 export default {
   data () {
     return {
+      loading: false,
       activeName: 'material',
       list: [],
       page: {
         currentPage: 1,
         total: 0,
-        pagerSize: 8
+        pageSize: 9
       }
     }
   },
   methods: {
+    uploadImg (params) {
+      this.loading = true
+      let data = new FormData()
+      data.append('image', params.file)
+      this.$http({
+        url: '/user/images',
+        method: 'post',
+        data
+      }).then((res) => {
+        this.loading = false
+        this.$emit('selectOneImg', res.data.url)
+      })
+    },
     // 选择图片
     selectOneImg (item) {
       this.$emit('selectOneImg', item.url)
@@ -49,13 +66,13 @@ export default {
     },
     // 获取素材
     getMaterial () {
-      let pagerParams = {
+      let pageParams = {
         page: this.page.currentPage,
-        per_page: this.page.pagerSize
+        per_page: this.page.pageSize
       }
       this.$http({
         url: '/user/images',
-        params: { collect: false, ...pagerParams }
+        params: { collect: false, ...pageParams }
       }).then(res => {
         this.list = res.data.results
         this.page.total = res.data.total_count
@@ -84,4 +101,28 @@ export default {
     }
   }
 }
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>
