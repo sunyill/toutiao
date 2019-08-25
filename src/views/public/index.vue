@@ -12,7 +12,7 @@
         <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="formData.content"></el-input>
       </el-form-item>
       <el-form-item label="封面">
-        <el-radio-group v-model="formData.cover">
+        <el-radio-group v-model="formData.cover.type">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
           <el-radio :label="0">无图</el-radio>
@@ -25,8 +25,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="publisThisArticle">发布</el-button>
-        <el-button>存入草稿</el-button>
+        <el-button type="primary" @click="publisThisArticle(false)">发布</el-button>
+        <el-button @click="publisThisArticle(true)">存入草稿</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -42,10 +42,17 @@ export default {
         title: '',
         content: '',
         channel_id: null,
-        cover: 0
+        cover: {
+          type: 0,
+          images: []
+        }
       },
       rules: {
-        title: [{ required: true, message: '标题不能为空' }],
+        title: [{ required: true, message: '标题不能为空' }, {
+          min: 5,
+          max: 30,
+          message: '亲, 输入字符在5-30字符之间'
+        }],
         content: [{ required: true, message: '文章内容不能为空' }],
         channel_id: [{ required: true, message: '频道不能为空' }]
       }
@@ -53,23 +60,18 @@ export default {
   },
   methods: {
     // 发布文章
-    publisThisArticle () {
+    publisThisArticle (draft) {
       this.$refs.myForm.validate(isOk => {
         if (isOk) {
-        //   this.$http({
-        //     url: '/articles',
-        //     method: 'post',
-        //     data: {
-        //       title: '',
-        //       content: '',
-        //       cover: 0,
-        //       images: [''],
-        //       channel_id: ''
-
-        //     }
-        //   }).then(res => {
-        //     alert('发布成功')
-        //   })
+          this.$http({
+            url: '/articles',
+            method: 'post',
+            params: { draft }, // 是否是草稿
+            data: this.formData
+          }).then(res => {
+            // alert('发布成功')
+            this.$router.push('/index/articles')
+          })
         }
       })
     },

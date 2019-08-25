@@ -17,7 +17,7 @@
             <!-- `checked` 为 true 或 false -->
 
         <el-form-item prop="check">
-          <el-checkbox v-model="checked" >记住账号密码</el-checkbox>
+          <el-checkbox v-model="checked" :isSelect=isSelect>记住账号密码</el-checkbox>
           <el-checkbox v-model="formData.check" class="checkbox">我已阅读并同意用户协议和隐私条款</el-checkbox>
         </el-form-item>
 
@@ -39,6 +39,7 @@ export default {
       }
     }
     return {
+      isSelect: false,
       formData: {
         mobile: '',
         code: '',
