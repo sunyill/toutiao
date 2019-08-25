@@ -48,8 +48,8 @@
             </div>
           </div>
           <div class="right">
-            <span style="cursor:pointer">
-              <i class="el-icon-edit"></i>修改
+            <span style="cursor:pointer" @click="takeEdit(item)">
+              <i class="el-icon-edit"  ></i>修改
             </span>
             <span style="cursor:pointer" @click="delThisItem(item)">
               <i class="el-icon-milk-tea"></i>删除
@@ -94,6 +94,10 @@ export default {
     }
   },
   methods: {
+    // 点击修改文章item内容
+    takeEdit (item) {
+      this.$router.push(`/index/publish/${item.id.toString()}`)
+    },
     // 点击删除删除item
     delThisItem (item) {
       // alert('王站, 你是最棒的!')
@@ -224,7 +228,7 @@ export default {
       }
       span {
         border: 1px solid #ccc;
-
+        cursor: pointer;
         padding: 2px;
         margin-right: 10px;
         .el-icon-edit {

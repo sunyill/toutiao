@@ -35,6 +35,9 @@ export default new Router({
       }, {
         path: '/index/publish',
         component: () => import('./views/public')
+      }, { // 动态路由的方式, 为了获取重新修改后的内容, 根据id进行修改
+        path: '/index/publish/:articlesId',
+        component: () => import('./views/public')
       }]
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
