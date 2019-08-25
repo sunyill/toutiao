@@ -20,7 +20,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <imagecover :type="formData.cover.type" :images="formData.cover.images">
+        <imagecover @upDataImages='upDataImages' :type="formData.cover.type" :images="formData.cover.images">
         </imagecover>
       </el-form-item>
       <el-form-item label="频道" prop="channel_id">
@@ -65,6 +65,11 @@ export default {
     }
   },
   methods: {
+    upDataImages (url, index) {
+      this.formData.cover.images = this.formData.cover.images.map((item, i) => {
+        return i === index ? url : item
+      })
+    },
     // 根据type 获取不同的一图, 三图, 自动
     changeType () {
       if (this.formData.cover.type === 1) { // 单图

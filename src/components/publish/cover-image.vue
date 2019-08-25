@@ -1,9 +1,12 @@
 <template>
  <!-- 循环生成添加图片初步界面 -->
     <div class="cover-image">
-        <div class="cover-item" v-for="(item,index) in images" :key="index">
+        <div class="cover-item" @click="clickImage(index)" v-for="(item,index) in images" :key="index">
             <img :src="item?item:defaultImg" alt="">
         </div>
+        <el-dialog :visible=showDialog @close= 'showDialog=false' >
+            <imageselect @selectOneImg='selectImg'></imageselect>
+        </el-dialog>
     </div>
 </template>
 
@@ -12,7 +15,19 @@ export default {
   props: ['type', 'images'],
   data () {
     return {
+      imageIndex: -1,
+      showDialog: false,
       defaultImg: require('../../assets/img/pic_bg.png')
+    }
+  },
+  methods: {
+    selectImg (url) {
+      this.$emit('updateImages', url, this.imageIndex)
+      this.showDialog = false
+    },
+    clickImage (index) {
+      this.showDialog = true
+      this.imageIndex = index
     }
   }
 }
