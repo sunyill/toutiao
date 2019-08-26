@@ -6,7 +6,7 @@
 
     <el-col :span="6" class="layout_right">
       <img :src="user.photo?user.photo:defaultImg" alt />
-      <el-dropdown trigger="click" @command=commandAction>
+      <el-dropdown trigger="click" @command="commandAction">
         <span class="el-dropdown-link">
           {{user.name}}
           <i class="el-icon-arrow-down el-icon--right"></i>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -33,7 +34,7 @@ export default {
     getUserInfo () {
       this.$http({
         url: '/user/profile'
-      }).then((res) => {
+      }).then(res => {
         console.log(res.data.data)
         this.user = res.data
       })
@@ -56,7 +57,9 @@ export default {
     }
   },
   created () {
-    this.getUserInfo()
+    eventBus.$on('updateUserInfoSuccess', () => {
+      this.getUserInfo()
+    })
   }
 }
 </script>
