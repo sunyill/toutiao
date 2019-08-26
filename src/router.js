@@ -7,6 +7,12 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    // 通配符使用* ,如果找不到页面进入404页面
+    {
+      path: '*',
+      component: () => import('./views/notfound')
+
+    },
     {
       path: '/',
       redirect: '/home'
