@@ -1,5 +1,9 @@
 <template>
-  <el-card v-loading='loading' element-loading-text="拼命加载中..." element-loading-spinner="el-icon-loading">
+  <el-card
+    v-loading="loading"
+    element-loading-text="拼命加载中..."
+    element-loading-spinner="el-icon-loading"
+  >
     <breadCommon slot="header">
       <!-- 面包屑的插槽 具名插槽  title-->
       <template slot="title">评论列表</template>
@@ -25,10 +29,15 @@
 
     <!-- 分页处理 -->
     <el-row type="flex" justify="center" style="margin:20px 0">
-      <el-pagination background class="fenye" layout="prev, pager, next" :total="page.total"
-      :page-size="page.pageSize"
-      :current-page="page.currentPage"
-      @current-change='pageStartChange'></el-pagination>
+      <el-pagination
+        background
+        class="fenye"
+        layout="prev, pager, next"
+        :total="page.total"
+        :page-size="page.pageSize"
+        :current-page="page.currentPage"
+        @current-change="pageStartChange"
+      ></el-pagination>
     </el-row>
   </el-card>
 </template>
@@ -52,35 +61,62 @@ export default {
       this.page.currentPage = newPage
       this.getComments()
     },
-    closeOrOpen (row) {
+
+    // 使用 async  , await 方式
+    async closeOrOpen (row) {
       let mess = row.comment_status ? '关闭' : '打开'
-      this.$confirm(`您确定要${mess}评论吗?`, '提示').then(() => {
-        this.$http({
+      try {
+        await this.$confirm(`您确定要${mess}评论吗?`, '提示')
+        await this.$http({
           method: 'put',
           url: '/comments/status',
           params: { article_id: row.id.toString() },
           data: { allow_comment: !row.comment_status }
-        }).then(() => {
-          this.getComments()
         })
-      })
+        await this.getComments()
+      } catch (error) {
+        // 如果点击了取消的处理
+        console.log(error)
+      }
     },
-    getComments () {
+
+    // closeOrOpen (row) {
+    //   let mess = row.comment_status ? '关闭' : '打开'
+    //   this.$confirm(`您确定要${mess}评论吗?`, '提示').then(() => {
+    //     this.$http({
+    //       method: 'put',
+    //       url: '/comments/status',
+    //       params: { article_id: row.id.toString() },
+    //       data: { allow_comment: !row.comment_status }
+    //     }).then(() => {
+    //       this.getComments()
+    //     })
+    //   })
+    // },
+    async getComments () {
       this.loading = true
-      let pageParams = { page: this.page.currentPage, per_page: this.page.pageSize }
-      this.$http({
+      let pageParams = {
+        page: this.page.currentPage,
+        per_page: this.page.pageSize
+      }
+      // 使用 async  , await 方式
+      let result = await this.$http({
         url: '/articles',
         params: {
           response_type: 'comment',
           ...pageParams
         }
-      }).then(result => {
-        console.log(result)
-        this.list = result.data.results
-        // total_count  接口中总的数据
-        this.page.total = result.data.total_count
-        this.loading = false
       })
+      this.list = result.data.results
+      this.page.total = result.data.total_count
+      this.loading = false
+      // .then(result => {
+      //   console.log(result)
+      //   this.list = result.data.results
+      //   // total_count  接口中总的数据
+      //   this.page.total = result.data.total_count
+      //   this.loading = false
+      // })
     },
     formatter (row, column, cellValue, index) {
       return cellValue ? '正常' : '关闭'
@@ -94,7 +130,7 @@ export default {
 </script >
 
 <style lang="less" scoped>
-.fenye{
+.fenye {
   background: paleturquoise;
 }
 </style>
