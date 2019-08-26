@@ -62,6 +62,8 @@ div:focus {
 .inlineBlock {
   display: block;
 }
+
 #nprogress .bar {
-  background: red !important;
-}
+  background:red !important; 
+  }
+
