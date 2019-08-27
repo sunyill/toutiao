@@ -4,7 +4,7 @@
       <el-tab-pane label="素材管理" name="material">
         <div class="material-list">
           <el-card class="material-item" v-for="item in list" :key="item.id">
-            <img alt @click="selectOneImg(item)" :src="item.url" />
+            <img @click="selectOneImg(item)" :src="item.url" />
           </el-card>
         </div>
         <!-- 分页部分 -->
@@ -20,7 +20,7 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="上传" name="upload">
-          <el-upload :http-request="uploadImg" class="avatar-uploader" action :show-file-list="false"></el-upload>
+          <el-upload :http-request="uploadImg" class="avatar-uploader" action  :show-file-list="false"></el-upload>
           <i class="el-icon-plus avatar-uploader-icon"></i>
       </el-tab-pane>
     </el-tabs>
@@ -37,7 +37,7 @@ export default {
       page: {
         currentPage: 1,
         total: 0,
-        pageSize: 9
+        pageSize: 8
       }
     }
   },
@@ -57,6 +57,7 @@ export default {
     },
     // 选择图片
     selectOneImg (item) {
+      console.log(item.url)
       this.$emit('selectOneImg', item.url)
     },
     // 更改分页

@@ -28,7 +28,7 @@ export default {
       },
       title: {
         left: 'center',
-        text: '大数据量面积图'
+        text: 'this is a big database'
       },
       toolbox: {
         feature: {

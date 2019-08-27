@@ -4,8 +4,8 @@
         <div class="cover-item" @click="clickImage(index)" v-for="(item,index) in images" :key="index">
             <img :src="item?item:defaultImg" alt="">
         </div>
-        <el-dialog :visible=showDialog @close= 'showDialog=false' >
-            <imageselect @selectOneImg='selectImg'></imageselect>
+        <el-dialog :visible="showDialog" @close= "showDialog=false" >
+            <imageselect @selectOneImg="selectImg"></imageselect>
         </el-dialog>
     </div>
 </template>

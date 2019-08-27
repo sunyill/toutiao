@@ -40,10 +40,10 @@ export default new Router({
         component: () => import('./views/article')
       }, {
         path: '/index/publish',
-        component: () => import('./views/public')
+        component: () => import('./views/publish')
       }, { // 动态路由的方式, 为了获取重新修改后的内容, 根据id进行修改
         path: '/index/publish/:articlesId',
-        component: () => import('./views/public')
+        component: () => import('./views/publish')
       }, {
         path: '/index/account',
         component: () => import('./views/account')

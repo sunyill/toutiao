@@ -1,7 +1,11 @@
 <template>
   <el-row type="flex" class="row-bg" justify="space-between">
-    <el-col :span="6">
-      <div class="grid-content">北京市blackHouse总部</div>
+
+    <el-col :span="10"  >
+      <div style="display:flex; flex-direction:row; align-items: center ;">
+      <i @click="openOrClose" :class="currentClass" class="fold_open"></i>
+      <div class="grid-content">北京市粉丝总部</div>
+      </div>
     </el-col>
 
     <el-col :span="6" class="layout_right">
@@ -27,10 +31,16 @@ export default {
   data () {
     return {
       user: {},
+      currentClass: 'el-icon-s-fold',
       defaultImg: require('../../assets/img/avatar.jpg')
     }
   },
   methods: {
+    // 展开或者折叠
+    openOrClose () {
+      eventBus.$emit('collopseOrClose')
+      this.currentClass = this.currentClass === 'el-icon-s-fold' ? 'el-icon-s-unfold' : 'el-icon-s-fold'
+    },
     getUserInfo () {
       this.$http({
         url: '/user/profile'
@@ -65,6 +75,10 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.fold_open{
+  font-size: 25px;
+  margin-right:10px;
+}
 .layout_right {
   display: flex;
   align-items: center;
